@@ -1,21 +1,17 @@
-apiVersion: serving.knative.dev/v1
-kind: Service
+---
+apiVersion: v1
+kind: Pod
 metadata:
-  name: helloworld-go
-  namespace: default
+  name: rss-site
+  labels:
+    app: web
 spec:
-  template:
-    spec:
-      containers:
-        - image: gcr.io/knative-samples/helloworld-go
-          env:
-            - name: TARGET
-              value: "Go Sample v1"
-   traffic:
-   - percent: 0
-     revisionName: example-service-1
-     tag: staging
-   - percent: 40
-     revisionName: example-service-2
-   - percent: 60
-     revisionName: example-service-3
+  containers:
+    - name: front-end
+      image: nginx
+      ports:
+        - containerPort: 80
+    - name: rss-reader
+      image: nickchase/rss-php-nginx:v1
+      ports:
+        - containerPort: 88
