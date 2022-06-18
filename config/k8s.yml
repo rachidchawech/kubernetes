@@ -1,17 +1,15 @@
----
-apiVersion: v1
-kind: Pod
+apiVersion: serving.knative.dev/v1alpha1 # Current version of Knative
+kind: Service
 metadata:
-  name: rss-site
-  labels:
-    app: web
+  name: helloworld-go # The name of the app
+  namespace: default # The namespace the app will use
 spec:
-  containers:
-    - name: front-end
-      image: nginx
-      ports:
-        - containerPort: 80
-    - name: rss-reader
-      image: nickchase/rss-php-nginx:v1
-      ports:
-        - containerPort: 88
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: gcr.io/knative-samples/helloworld-go # The URL to the image of the app
+            env:
+            - name: TARGET # The environment variable printed out by the sample app
+              value: "Go Sample v1"
